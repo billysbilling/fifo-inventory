@@ -1,0 +1,226 @@
+---
+swagger: "2.0"
+info:
+  description: "Test service"
+  version: "1.0.0"
+  title: "Test service"
+  contact:
+    email: "anton.pavlov.x120pk@gmail.com"
+host: "test.service.com"
+tags:
+- name: "service"
+schemes:
+- "https"
+paths:
+  /transactions:
+    get:
+      tags:
+      - "Transactions"
+      summary: "Transactions get list"
+      operationId: "transactionsGET"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Transactions"
+  /products:
+    get:
+      tags:
+      - "Products"
+      summary: "Products get list"
+      operationId: "productsGET"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+    put:
+      tags:
+      - "Products"
+      summary: "Create product"
+      operationId: "productsPUT"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Product"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+  /products/{productid}:
+    get:
+      tags:
+      - "Products"
+      summary: "Get product by id"
+      operationId: "productidGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productid"
+        in: "path"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+    delete:
+      tags:
+      - "Products"
+      summary: "Delete product by id"
+      operationId: "productidDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productid"
+        in: "path"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+    put:
+      tags:
+      - "Products"
+      summary: "Update product"
+      operationId: "productidPUT"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productid"
+        in: "path"
+        type: "number"
+        required: true
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Product"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+  /products/{productid}/buy:
+    put:
+      tags:
+      - "Products"
+      summary: "Buy product"
+      operationId: "productidbuyPUT"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productid"
+        in: "path"
+        type: "number"
+        required: true
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/ProductOperation"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+  /products/{productid}/sell:
+    put:
+      tags:
+      - "Products"
+      summary: "Sell product"
+      operationId: "productidsellPUT"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productid"
+        in: "path"
+        type: "number"
+        required: true
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/ProductOperation"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Products"
+definitions:
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Product's price"
+      price:
+        type: "number"
+        description: "Product's price"
+    required:
+    - name
+    - price
+  ProductOperation:
+    type: "object"
+    properties:
+      quantity:
+        type: "number"
+        description: "Quantity of products"
+    required:
+    - quantity

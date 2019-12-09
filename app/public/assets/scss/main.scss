@@ -1,0 +1,37 @@
+body {
+    padding-top: 70px;
+}
+
+textarea {
+    resize: none;
+}
+
+#users_table tbody tr {
+    cursor: pointer;
+}
+
+.user-data .container-fluid {
+    padding-top: 15px;
+}
+
+.capitalize {
+    display: inline-block;
+}
+
+.capitalize::first-letter {
+    text-transform: uppercase;
+}
+
+.capitalize2 {
+    text-transform: capitalize;
+}
+
+form.editable-wrap {
+    margin-left: 15px;
+}
+
+.caption {
+    div {
+        padding: 0;
+    }
+}

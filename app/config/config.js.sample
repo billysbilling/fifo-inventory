@@ -1,0 +1,7 @@
+module.exports = {
+    "server": {
+        "port":             3000,
+        "swagger_path":     "api/swagger.yaml",
+        "controllers_path": "controllers"
+    }
+};

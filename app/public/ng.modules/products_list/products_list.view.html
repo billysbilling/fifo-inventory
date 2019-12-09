@@ -1,0 +1,51 @@
+<div class="container">
+    <flash-message></flash-message>
+    <div class=" loading" ng-if="!$ctrl.is_page_loaded">
+        <img src="/assets/img/loading.gif" />&nbsp;&nbsp;&nbsp;<span>Loading...</span>
+    </div>
+
+    <legend>Products list</legend>
+
+    <div class="form-group">
+        <a class="btn btn-primary btn-space" ui-sref="products_new">Add new</a>
+    </div>
+
+    <table ng-show="$ctrl.all_items.length" class="table table-hover table-bordered table-sm" id="products_table">
+        <thead>
+            <tr>
+                <th class="col-md-1">Id</th>
+                <th class="col-md-3">Name</th>
+                <th class="col-md-3">Quantity</th>
+                <th class="col-md-3">Price</th>
+                <th class="col-md-2">action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="product in $ctrl.items_per_page" ng-click="$ctrl.showProduct(product.id)">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.price }}</td>
+                <td class="text-center">
+                    <button class="btn btn-xs btn-danger" ng-click="$ctrl.removeProduct(product.id, $event)">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div ng-show="$ctrl.all_items.length" class="col-sm-10 text-center">
+        <p ng-hide="!$ctrl.filtered_items.length">Showing {{ ($ctrl.current_page - 1) * $ctrl.page_size + 1 }} to {{ ($ctrl.current_page * $ctrl.page_size) > $ctrl.filtered_items.length ? $ctrl.filtered_items.length : ($ctrl.current_page * $ctrl.page_size)}} of {{ $ctrl.filtered_items.length }} entries</p>
+        <p ng-show="!$ctrl.filtered_items.length">Showing 0</p>
+        <ul uib-pagination
+            ng-show="$ctrl.filtered_items.length > $ctrl.page_size"
+            boundary-links="true"
+            max-size="9"
+            items-per-page="$ctrl.page_size"
+            total-items="$ctrl.filtered_items.length"
+            ng-model="$ctrl.current_page"
+            ng-change="$ctrl.getPage()">
+        </ul>
+    </div>
+
+    <p ng-hide="$ctrl.all_items.length">No products found</p>
+</div>

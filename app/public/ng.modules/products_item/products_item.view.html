@@ -1,0 +1,73 @@
+<div class="container">
+    <flash-message></flash-message>
+    <div class=" loading" ng-if="!$ctrl.is_page_loaded">
+        <img src="/assets/img/loading.gif" />&nbsp;&nbsp;&nbsp;<span>Loading...</span>
+    </div>
+
+    <legend>Product</legend>
+
+    <form class="form-horizontal" role="form" name="edit_product_form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Name</label>
+            <div class="col-md-3">
+                <input class="form-control" required ng-model="$ctrl.product.name" type="text" placeholder="Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Price</label>
+            <div class="col-md-3">
+                <input class="form-control" required ng-model="$ctrl.product.price" type="text" placeholder="Price">
+            </div>
+        </div>
+        <div class="form-group" ng-show="$ctrl.is_data_loading">
+            <div class="col-md-6 col-md-offset-2">
+                <img src="/assets/img/loading.gif" />
+            </div>
+        </div>
+        <div class="form-group" ng-hide="$ctrl.is_data_loading">
+            <div class="col-md-6 col-md-offset-2">
+                <input class="btn btn-success" type="submit" ng-disabled="edit_product_form.$invalid" ng-click="$ctrl.update()" value="Update">
+                <input class="btn btn-danger" type="submit" ng-click="$ctrl.remove()" value="Remove product">
+            </div>
+        </div>
+
+        <legend>Transactions</legend>
+        <table class="table table-hover table-bordered table-sm" id="transactions_table">
+            <thead>
+                <tr>
+                    <th class="col-md-1">Id</th>
+                    <th class="col-md-2">Quantity</th>
+                    <th class="col-md-3">Price per item</th>
+                    <th class="col-md-3">Total cost</th>
+                    <th class="col-md-2">Type</th>
+                    <th class="col-md-1">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                    
+                <tr ng-repeat="transaction in $ctrl.transactions">
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.quantity }}</td>
+                    <td>{{ transaction.price_per_item }}</td>
+                    <td>{{ transaction.total_cost }}</td>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.date }}</td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <!-- <div ng-show="$ctrl.all_items.length" class="col-sm-10 text-center">
+            <p ng-hide="!$ctrl.filtered_items.length">Showing {{ ($ctrl.current_page - 1) * $ctrl.page_size + 1 }} to {{ ($ctrl.current_page * $ctrl.page_size) > $ctrl.filtered_items.length ? $ctrl.filtered_items.length : ($ctrl.current_page * $ctrl.page_size)}} of {{ $ctrl.filtered_items.length }} entries</p>
+            <p ng-show="!$ctrl.filtered_items.length">Showing 0</p>
+            <ul uib-pagination
+                ng-show="$ctrl.filtered_items.length > $ctrl.page_size"
+                boundary-links="true"
+                max-size="9"
+                items-per-page="$ctrl.page_size"
+                total-items="$ctrl.filtered_items.length"
+                ng-model="$ctrl.current_page"
+                ng-change="$ctrl.getPage()">
+            </ul>
+        </div> -->
+    </form>
+</div>
