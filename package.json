@@ -1,0 +1,44 @@
+{
+  "name": "fifo-inventory",
+  "version": "0.0.0",
+  "description": "FIFO inventory",
+  "main": "build/index.js",
+  "scripts": {
+    "clean": "rm -rf build/",
+    "prebuild": "npm run clean",
+    "build": "babel src --out-dir build --copy-files",
+    "lint": "eslint .",
+    "test": "mocha test",
+    "start": "node build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billysbilling/fifo-inventory.git"
+  },
+  "keywords": [
+    "inventory"
+  ],
+  "author": "Razvan Laurus <razvanlaurus@gmail.com>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/billysbilling/fifo-inventory/issues"
+  },
+  "homepage": "https://github.com/billysbilling/fifo-inventory#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.4",
+    "babel-eslint": "^10.0.3",
+    "chai": "^4.2.0",
+    "eslint": "^6.7.2",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "mocha": "^6.2.2"
+  }
+}
