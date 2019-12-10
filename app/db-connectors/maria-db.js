@@ -1,7 +1,7 @@
 'use strict';
 
-let log     = require("debug")(`Pid: ${process.pid} MariaDb:log`),
-    error   = require("debug")(`Pid: ${process.pid} MariaDb:error`),
+let log     = require("../libs/logger")(`Pid: ${process.pid} MariaDb:log`),
+    error   = require("../libs/logger")(`Pid: ${process.pid} MariaDb:error`),
     config  = require("../config/config"),
     _       = require("lodash"),
     mariadb = require('mariadb'),

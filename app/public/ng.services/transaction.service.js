@@ -21,11 +21,9 @@ function TransactionService($http, logger) {
     logger.debug("+OK - TransactionService");
 
     var service = {
-        getTransactions:  getTransactions,
-        removeTransaction:   removeTransaction,
-        updateTransaction:   updateTransaction,
-        getTransactionById:  getTransactionById,
-        createTransaction:   createTransaction
+        getTransactions:    getTransactions,
+        removeTransaction:  removeTransaction,
+        createTransaction:  createTransaction
     };
 
     return service;
@@ -36,35 +34,19 @@ function TransactionService($http, logger) {
 
     // Public functions
     function getTransactions() {
-        return $http.get('/transactions').then( handleSuccess, handleError );
-    }
-
-    function getTransactionById(transaction_id) {
-        return $http.get('/transactions/' + transaction_id).then( handleSuccess, handleError );
+        return $http.get('/transactions').then( handleSuccess );
     }
 
     function removeTransaction(transaction_id) {
-        return $http.delete('/transactions/' + transaction_id).then( handleSuccess, handleError );
-    }
-
-    function updateTransaction(data) {
-        return $http.put('/transactions/' + data.id, data).then( handleSuccess, handleError );
+        return $http.delete('/transactions/' + transaction_id).then( handleSuccess );
     }
 
     function createTransaction(data) {
-        return $http.put('/transactions', data).then( handleSuccess, handleError );
+        return $http.put('/transactions', data).then( handleSuccess );
     }
 
     // Private functions
     function handleSuccess(response) {
         return( response.data );
-    }
-
-    function handleError(status, data) {
-        logger.error("+ERR - TransactionService. status: ",status, "data: ",data);
-        return {
-            success:    false,
-            error:      (status && status.statusText) || "Internal Server Error"
-        };
     }
 }

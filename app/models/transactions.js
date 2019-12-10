@@ -1,7 +1,7 @@
 'use strict';
 
-let log         = require("debug")(`Pid: ${process.pid} TransactionsModel:log`),
-    error       = require("debug")(`Pid: ${process.pid} TransactionsModel:error`),
+let log         = require("../libs/logger")(`Pid: ${process.pid} TransactionsModel:log`),
+    error       = require("../libs/logger")(`Pid: ${process.pid} TransactionsModel:error`),
     Database    = require("../db-connectors/maria-db");
 
 /**
@@ -44,6 +44,34 @@ class Transactions extends Database {
         log("+OK - getTransactions");
 
         return this.fetchAll('SELECT id, prod_id, quantity, price_per_item, total_cost, date, type FROM transactions');
+    }
+
+    /**
+     * Function for deleting specific transaction by id
+     *
+     * @param {Object}  params
+     * @param {Number}  params.id - Identifier of transaction
+     *
+     * @returns {Promise}
+     */
+    deleteTransactionById(params) {
+        log("+OK - deleteTransactionById");
+
+        return this.delete('transactions', params);
+    }
+
+    /**
+     * Function for getting specific product by id
+     *
+     * @param {Object}  params
+     * @param {Number}  params.id - Identifier of product
+     *
+     * @returns {Promise}
+     */
+    getTransactionById(params) {
+        log("+OK - getTransactionById");
+        const query = 'SELECT id, prod_id, quantity, price_per_item, total_cost, date, type FROM transactions WHERE id = ?'; 
+        return this.fetchOne(query, [params.id]);
     }
 }
 

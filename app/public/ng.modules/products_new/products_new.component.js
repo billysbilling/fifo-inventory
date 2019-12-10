@@ -49,7 +49,7 @@ function ProductsNewController($state, ProductService, Flash, logger) {
             })
             .catch(err => {
                 logger.debug("+ERR - ProductsNewController.create. Can not create product: ",err);
-                Flash.create("danger", err);
+                Flash.create("danger", err.data.message);
             });
     }
 }

@@ -1,7 +1,7 @@
 'use strict';
 
-let log                 = require("debug")(`Pid: ${process.pid} Http:log`),
-    error               = require("debug")(`Pid: ${process.pid} Http:error`),
+let log                 = require("../libs/logger")(`Pid: ${process.pid} Http:log`),
+    error               = require("../libs/logger")(`Pid: ${process.pid} Http:error`),
     config              = require("../config/config"),
     cors                = require('cors'),
     express             = require('express'),

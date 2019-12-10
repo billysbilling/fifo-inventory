@@ -1,7 +1,7 @@
 'use strict';
 
-let log         = require("debug")(`Pid: ${process.pid} ProductsModel:log`),
-    error       = require("debug")(`Pid: ${process.pid} ProductsModel:error`),
+let log         = require("../libs/logger")(`Pid: ${process.pid} ProductsModel:log`),
+    error       = require("../libs/logger")(`Pid: ${process.pid} ProductsModel:error`),
     Database    = require("../db-connectors/maria-db");
 
 /**
@@ -89,6 +89,48 @@ class Products extends Database {
         log("+OK - updateProductById");
 
         return this.update("products", params, { id: params.id });
+    }
+
+    /**
+     * Task 1
+     *
+     * @param {Object}  params
+     * @param {Number}  params.date - Identifier of product
+     *
+     * @returns {Promise}
+     */
+    getTask1(params) {
+        log("+OK - getTask1");
+        const query = 'SELECT SUM(quantity) AS result FROM transactions WHERE date < DATE(?)';
+        return this.fetchOne(query, [params.date]);
+    }
+
+    /**
+     * Task 2
+     *
+     * @param {Object}  params
+     * @param {Number}  params.date - Identifier of product
+     *
+     * @returns {Promise}
+     */
+    getTask2(params) {
+        log("+OK - getProdgetTask2uctById");
+        const query = 'SELECT SUM(total_cost) AS result FROM transactions WHERE date < DATE(?)';
+        return this.fetchOne(query, [params.date]);
+    }
+
+    /**
+     * Task 3
+     *
+     * @param {Object}  params
+     * @param {Number}  params.date - Identifier of product
+     *
+     * @returns {Promise}
+     */
+    getTask3(params) {
+        log("+OK - getProdgetTask2uctById");
+        const query = 'SELECT ABS(SUM(total_cost)) AS result FROM transactions WHERE date < DATE(?) AND type = \'sell\'';
+        return this.fetchOne(query, [params.date]);
     }
 }
 

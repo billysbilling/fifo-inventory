@@ -72,19 +72,17 @@ function ProductsListController($state, ProductService, Flash, logger) {
             .then(function(result) {
                 logger.debug("+OK - ProductsListController.removeProduct Product has been removed result: ",result);
 
-                // if(!result.success) {
-                //     logger.debug("+ERR - ProductsListController.removeProduct Can not remove product: ",result.error);
-                //     Flash.create("danger", result.error);
-                //     return;
-                // }
-
                 var product_idx = _.findIndex(vm.all_items, { 'id': id });
                 vm.all_items.splice(product_idx, 1);
 
                 getPage();
 
                 Flash.create("success", "Product has been deleted successfully");
-            });
+            })
+            .catch(err => {
+                logger.debug("+ERR - ProductsItemController.removeProduct. error: ", err);
+                Flash.create("danger", err.data.message);
+            });;
     }
 
     function init() {
@@ -98,9 +96,10 @@ function ProductsListController($state, ProductService, Flash, logger) {
 
                 vm.all_items = result;
                 vm.getPage();
-            }).catch(err => {
+            })
+            .catch(err => {
                 logger.debug("+ERR - ProductsListController. error: ", err);
-                Flash.create("danger",err);
+                Flash.create("danger", "Can't request data");
             });
     }
 }

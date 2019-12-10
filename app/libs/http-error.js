@@ -1,6 +1,6 @@
 "use strict";
 
-let error   = require("debug")(`Pid: ${process.pid} Error:error`),
+let error   = require("../libs/logger")(`Pid: ${process.pid} Error:error`),
     url     = require("url");
 
 // Define list of possible errors
@@ -11,6 +11,10 @@ let err_codes = {
     },
     "E_INT_SERVER": {
         "message":      "Internal server error",
+        "http_code":    500
+    },
+    "E_PROD_LIMIT": {
+        "message":      "You can't sell more than you have",
         "http_code":    500
     }
 };

@@ -1,7 +1,7 @@
 'use strict';
 
-let log             = require("debug")(`Pid: ${process.pid} Index:log`),
-    error           = require("debug")(`Pid: ${process.pid} Index:error`),
+let log             = require("./libs/logger")(`Pid: ${process.pid} Index:log`),
+    error           = require("./libs/logger")(`Pid: ${process.pid} Index:error`),
     Http            = require("./libs/http-server");
 
 process.on('uncaughtException', err => {

@@ -4,13 +4,14 @@ angular
     .module('codeChal.products_item', [
         'codeChal.productService',
         'codeChal.transactionService',
+        'codeChal.taskService',
     ])
     .component('productsItem', {
         templateUrl: 'ng.modules/products_item/products_item.view.html',
         controller: ProductsItemController
     });
 
-ProductsItemController.$inject = ['$state', '$stateParams', 'ProductService', 'TransactionService', 'Flash', '$log', '$q'];
+ProductsItemController.$inject = ['$state', '$stateParams', 'ProductService', 'TransactionService', 'TaskService', 'moment', 'Flash', '$log', '$q'];
 
 /**
  * ProductsItemController
@@ -23,7 +24,7 @@ ProductsItemController.$inject = ['$state', '$stateParams', 'ProductService', 'T
  * @param $q
  * @constructor
  */
-function ProductsItemController($state, $stateParams, ProductService, TransactionService, Flash, logger, $q) {
+function ProductsItemController($state, $stateParams, ProductService, TransactionService, TaskService, moment, Flash, logger, $q) {
     logger.debug("+OK - ProductsItemController. "+$stateParams.product_id);
 
     var vm = this;
@@ -34,24 +35,30 @@ function ProductsItemController($state, $stateParams, ProductService, Transactio
     }
 
     vm.is_data_loading = false;
+    vm.is_transaction_loading = false;
     vm.is_page_loaded = false;
-
-    // vm.all_items            = [];
-    // vm.filtered_items       = [];
-    // vm.items_per_page       = [];
-
-    // vm.current_page         = 1;
-    // vm.page_size            = 10;
 
     vm.product = null;
     vm.transactions = [];
-    // vm.mappings_products = [];
+
+    vm.dtPopup = {
+        opened: false
+    };
 
     // vm.getPage          = getPage;
-    vm.update           = update;
-    vm.remove           = remove;
-    vm.removeMapping    = removeMapping;
-    vm.addMapping       = addMapping;
+    vm.update               = update;
+    vm.remove               = remove;
+    vm.openDatePicker       = openDatePicker;
+    vm.addTransaction       = addTransaction;
+    vm.removeTransaction    = removeTransaction;
+    vm.taskStart            = taskStart;
+
+    vm.datePickerOptions = {
+        formatYear: 'yy',
+        maxDate: new Date(2028, 1, 1),
+        minDate: new Date(1900, 1, 1),
+        startingDay: 1
+    };
 
     init();
 
@@ -59,79 +66,29 @@ function ProductsItemController($state, $stateParams, ProductService, Transactio
     // Implementations
     /////////////////////
 
-    // function getPage() {
-
-    //     logger.debug("+OK - ProductsItemController. getPage");
-
-    //     var begin = ((vm.current_page - 1) * vm.page_size);
-    //     var end = begin + vm.page_size;
-
-    //     vm.filtered_items = vm.all_items;
-    //     vm.items_per_page = vm.filtered_items.slice(begin, end);
-
-    //     logger.debug("vm.filtered_items: ", vm.items_per_page, " begin: ",begin, " end: ", end);
-    // }
-
-    function removeMapping(mapping_id, product_id, event) {
-        logger.debug("+OK - ProductsItemController.removeMapping. mapping_id: ", mapping_id, event);
-
-        MappingService.removeMapping(mapping_id)
-            .then(function(result) {
-                vm.is_data_loading = false;
-
-                var product = _.find(vm.products, { 'id': product_id });
-
-                logger.debug("+OK - ProductsItemController.removeMapping. product: ", product);
-
-                if(!product) {
-                    logger.debug("+ERR - ProductsItemController.removeMapping. can not remove mapping");
-                    return;
-                }
-
-                product.compatible = false;
-            })
-            .catch(err => {
-                logger.debug("+ERR - ProductsItemController.removeMapping error: ", err);
-                Flash.create("danger",err);
-            });
+    function openDatePicker() {
+        vm.dtPopup.opened = true;
     }
 
-    function addMapping(product_id) {
-        logger.debug("+OK - ProductsItemController.addMapping. product_id: ", product_id);
-
-        if(product_id == $stateParams.product_id) {
-            logger.debug("+ERR - ProductsItemController.addMapping. product1 is equal to product2");
-            return;
-        }
-
-        var create_mapping_fields = {
-            id_product1: product_id > $stateParams.product_id ? parseInt($stateParams.product_id) : parseInt(product_id),
-            id_product2: product_id < $stateParams.product_id ? parseInt($stateParams.product_id) : parseInt(product_id)
-        };
-
-        MappingService.createMapping(create_mapping_fields)
-            .then(function(result) {
-                vm.is_data_loading = false;
-
-                var product = _.find(vm.products, { 'id': product_id });
-
-                logger.debug("+OK - ProductsItemController.addMapping. product: ", product);
-
-                if(!product) {
-                    logger.debug("+ERR - ProductsItemController.addMapping. Can not create mapping");
-                    return;
-                }
-
-                product.compatible = true;
+    function taskStart(task_id, date) {
+        logger.debug("+OK - ProductsItemController.taskStart. task_id" + task_id + " date: " + date);
+        TaskService.performTask({
+            task_id:    task_id,
+            date:       moment(date).format("YYYY-MM-DD HH:mm:ss")
+        })
+            .then(function(data) {
+                logger.debug("+OK - ProductsItemController.taskStart. data: ",  data);
+                vm["task"+task_id+"_res"] = data.result || 0;
             })
             .catch(err => {
-                logger.debug("+ERR - ProductsItemController.addMapping. error: ", err);
-                Flash.create("danger",err);
+                logger.debug("+ERR - ProductsItemController.addTransaction. error: ", err);
+                Flash.create("danger",err.data.message);
             });
     }
 
     function remove() {
         logger.debug("+OK - ProductsItemController.remove", vm.product);
+        vm.is_data_loading = true;
 
         ProductService.removeProduct(vm.product.id)
             .then(function(result) {
@@ -145,9 +102,24 @@ function ProductsItemController($state, $stateParams, ProductService, Transactio
                 Flash.create("danger",err);
             });
     }
+    function removeTransaction(id) {
+        logger.debug("+OK - removeTransaction id", id);
+        vm.is_transaction_loading = true;
+
+        TransactionService.removeTransaction(id)
+            .then(function(result) {
+                vm.is_transaction_loading = false;
+                init();
+            })
+            .catch(err => {
+                logger.debug("+ERR - ProductsItemController.removeTransaction. error: ", err);
+                Flash.create("danger",err);
+            });
+    }
 
     function update() {
         logger.debug("+OK - ProductsItemController.update. vm.product: ", vm.product);
+        vm.is_data_loading = true;
 
         ProductService.updateProduct(vm.product)
             .then(function(result) {
@@ -161,13 +133,55 @@ function ProductsItemController($state, $stateParams, ProductService, Transactio
             });
     }
 
+    function addTransaction() {
+        logger.debug("+OK - ProductsItemController.addTransaction. vm.transaction: ", vm.transaction);
+        vm.is_transaction_loading = true;
+
+        if(vm.transaction.type == 'buy') {
+            var buy_product_fields = {
+                date: moment(vm.transaction.date).format("YYYY-MM-DD HH:mm:ss"),
+                quantity: vm.transaction.quantity
+            };
+
+            logger.debug("+OK - ProductsItemController.addTransaction. buy_product_fields: ", buy_product_fields);
+            ProductService.buyProduct($stateParams.product_id, buy_product_fields)
+                .then(function(result) {
+                    vm.is_transaction_loading = false;
+                    Flash.create("success", "Transaction has been added successfully");
+                    vm.transaction = {};
+                    init();
+                })
+                .catch(err => {
+                    logger.debug("+ERR - ProductsItemController.addTransaction. error: ", err);
+                    Flash.create("danger",err.data.message);
+                });
+        } else if(vm.transaction.type == 'sell') {
+            var sell_product_fields = {
+                date: moment(vm.transaction.date).format("YYYY-MM-DD HH:mm:ss"),
+                quantity: vm.transaction.quantity
+            };
+
+            logger.debug("+OK - ProductsItemController.addTransaction. sell_product_fields: ", sell_product_fields);
+            ProductService.sellProduct($stateParams.product_id, sell_product_fields)
+                .then(function(result) {
+                    vm.is_transaction_loading = false;
+                    Flash.create("success", "Transaction has been added successfully");
+                    vm.transaction = {};
+                    init();
+                })
+                .catch(err => {
+                    logger.debug("+ERR - ProductsItemController.addTransaction. error: ", err);
+                    Flash.create("danger",err.data.message);
+                });
+        }
+    }
+
     function init() {
         logger.debug("Init");
 
         $q.all({
             "product":      ProductService.getProductById($stateParams.product_id),
-            "transactions": TransactionService.getTransactions(),
-            // "mappings_products":   MappingService.getMappingsByProductId($stateParams.product_id)
+            "transactions": TransactionService.getTransactions()
         })
             .then(function(results) {
                 logger.debug("+OK -  ProductsItemController.init. results: ", results);
@@ -176,24 +190,10 @@ function ProductsItemController($state, $stateParams, ProductService, Transactio
 
                 vm.product = results.product;
                 vm.transactions = results.transactions;
-                // vm.mappings_products = results.mappings_products;
-
-                // for(let item of results.products) {
-                //     if(item.id == $stateParams.product_id) { continue; }
-
-                //     let map_item = _.find(results.mappings_products, ['id', item.id]);
-
-                //     if(map_item) {
-                //         item.compatible = true;
-                //         item.mapping_id = map_item.mapping_id;
-                //     }
-                    
-                //     vm.products.push(item);
-                // }
             })
             .catch(err => {
                 logger.debug("+ERR - ProductsItemController.init. error: ", err);
-                Flash.create("danger",err);
+                Flash.create("danger", "Can't request data");
             });
     }
 }

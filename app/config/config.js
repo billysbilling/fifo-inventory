@@ -4,10 +4,12 @@ module.exports = {
         "swagger_path":     "api/swagger.yaml",
         "controllers_path": "controllers"
     },
-    "mongo_db": {
-        "url": "mongodb://mongo:27017/test_app",
-        "reconnectTries": 3600,
-        "reconnectInterval": 1000
+    "logging": {
+        "path":        "logs",
+        "filename":    "application-%DATE%.log",
+        "datePattern": "YYYY-MM-DD",
+        "maxSize":     "200m",
+        "maxFiles":    "30d"
     },
     "maria_db": {
         "host":     "mariadb",

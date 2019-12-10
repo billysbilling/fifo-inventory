@@ -12,12 +12,81 @@ tags:
 schemes:
 - "https"
 paths:
+  /tasks:
+    put:
+      tags:
+      - "Task"
+      summary: "Perform task by id"
+      operationId: "performtaskidPUT"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Task"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Task"
   /transactions:
     get:
       tags:
       - "Transactions"
       summary: "Transactions get list"
       operationId: "transactionsGET"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Transactions"
+  /transactions/{transactionid}:
+    get:
+      tags:
+      - "Transactions"
+      summary: "Get transaction by id"
+      operationId: "transactionidGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "transactionid"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        500:
+          description: "Internal server error"
+      x-swagger-router-controller: "Transactions"
+    delete:
+      tags:
+      - "Transactions"
+      summary: "Delete transaction by id"
+      parameters:
+      - name: "transactionid"
+        in: "path"
+        required: true
+        type: "number"
+      operationId: "transactionidDELETE"
       responses:
         200:
           description: "OK"
@@ -81,7 +150,7 @@ paths:
       - name: "productid"
         in: "path"
         required: true
-        type: "number"
+        type: "integer"
       responses:
         200:
           description: "OK"
@@ -222,5 +291,20 @@ definitions:
       quantity:
         type: "number"
         description: "Quantity of products"
+      date:
+        type: "string"
+        description: "Date of transaction"
     required:
     - quantity
+  Task:
+    type: "object"
+    properties:
+      date:
+        type: "string"
+        description: "Date"
+      task_id:
+        type: "integer"
+        description: "Identifier of task"
+    required:
+    - date
+    - task_id

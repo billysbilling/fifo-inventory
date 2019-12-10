@@ -4,3 +4,4 @@ mysql/data/*
 app/docs/*
 app/public/assets/css/*
 app/public/assets/js/all.min.js
+app/logs/*
