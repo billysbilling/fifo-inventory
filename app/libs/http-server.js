@@ -73,26 +73,6 @@ class Http {
             // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
             app.use(middleware.swaggerMetadata());
 
-            // app.use(middleware.swaggerSecurity({
-            //     Bearer: (req, def, token, next) => {
-            //
-            //         log("Bearer. token: %s req.requiredScopes: %j def: %j", req.token, req.requiredScopes, def);
-            //
-            //         jwt.verify(req.token, config.token.secret_key, (verification_error, decoded_token) => {
-            //
-            //             //check if the JWT was verified correctly
-            //             if (verification_error || !decoded_token) {
-            //                 error("+ERR - swaggerSecurity. verification_error: %j", verification_error);
-            //                 return next(new Error("E_NOT_TOKEN"));
-            //             }
-            //
-            //             req.decoded_token = decoded_token;
-            //
-            //             next();
-            //         });
-            //     }
-            // }));
-
             // Validate Swagger requests
             app.use(middleware.swaggerValidator({
                 validateResponse: false

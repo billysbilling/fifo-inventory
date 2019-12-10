@@ -44,11 +44,11 @@ While the implementation is up to you, the service should be self-sustained, pro
 Make sure you have [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) installed.
 
 ```sh
-$ git clone https://github.com/affair/Kahoot-code-challenge.git # or clone your own fork
-$ cd robot-parts
+$ git clone https://github.com/affair/fifo-inventory.git # or clone your own fork
+$ cd fifo-inventory
 $ # Start database
 $ docker-compose up -d --build mariadb
-# Now you need to make sure that it works.
+# Now you need to make sure that databse is up and running.
 $ docker-compose ps # State should be Up (healthy)
 $ # Now run everything else (nginx + webserver)
 $ docker-compose up -d --build

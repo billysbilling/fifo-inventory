@@ -85,7 +85,18 @@ exports.transactionidDELETE = function(req, res, next) {
  * 
  * @param {Number} transactionid - Identifier of transaction
  *
- * @returns {String}
+ * @returns {Object}
+ * <pre>
+ *  {
+ *      "id": <Number>,
+ *      "prod_id": <String>,
+ *      "quantity": <Number>
+ *      "total_cost": <Number>
+ *      "price_per_item": <Number>
+ *      "type": <String>
+ *      "date": <String>
+ *  }
+ * </pre>
  */
 exports.transactionidGET = function(req, res, next) {
 

@@ -59,6 +59,7 @@ exports.productsGET = function(req, res, next) {
  *  {
  *      "id": <Number>,
  *      "name": <String>,
+ *      "price": <Number>,
  *      "quantity": <Number>
  *  }
  * </pre>
@@ -156,8 +157,9 @@ exports.productidPUT = function(req, res, next) {
  * Create product
  *
  * @param {String} name
+ * @param {String} price
  *
- * @returns {String}
+ * @returns {Object} id
  */
 exports.productsPUT = function(req, res, next) {
 
@@ -185,8 +187,9 @@ exports.productsPUT = function(req, res, next) {
  * Buy products
  *
  * @param {Number} quantity
+ * @param {String=} date
  *
- * @returns {String}
+ * @returns {Object} trans_id
  */
 exports.productidbuyPUT = function(req, res, next) {
 
@@ -250,8 +253,9 @@ exports.productidbuyPUT = function(req, res, next) {
  * Sell products
  *
  * @param {Number} quantity
+ * @param {String=} date
  *
- * @returns {String}
+ * @returns {Object} trans_id
  */
 exports.productidsellPUT = function(req, res, next) {
 

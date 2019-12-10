@@ -14,7 +14,7 @@ let log     = require("../libs/logger")(`Pid: ${process.pid} MariaDb:log`),
  *
  * @requires config
  * @requires lodash
- * @requires mysql2
+ * @requires mariadb
  */
 class Database {
 

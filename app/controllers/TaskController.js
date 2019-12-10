@@ -16,19 +16,12 @@ let log             = require("../libs/logger")(`Pid: ${process.pid} TaskControl
  */
 
 /**
- * Get list of products
- *
- * @returns {Object}
- * <pre>
- *  [
- *      {
- *          "id": <Number>,
- *          "name": <String>,
- *          "quantity": <Number>
- *      },
- *      ...
- *  ]
- * </pre>
+ * Perform task
+ *  
+ * @param {String} date
+ * @param {Number} task_id
+ * 
+ * @returns {Object} result
  */
 exports.performtaskidPUT = function(req, res, next) {
 
