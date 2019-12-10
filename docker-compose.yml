@@ -12,7 +12,7 @@ services:
       - DEBUG=*:error,*:log
       - NODE_ENV=development
       - PORT=3000
-    command: bash -c "db-migrate up && gulp --gulpfile app/gulpfile.js watcher & nodemon -L app/index.js"
+    command: bash -c "db-migrate up && gulp --gulpfile app/gulpfile.js docs && gulp --gulpfile app/gulpfile.js watcher & nodemon -L app/index.js"
     ports:
       - "3000:3000"
     links:
